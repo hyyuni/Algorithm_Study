@@ -53,8 +53,8 @@ git commit -m "[SEA] 농작물 수확하기 / 2805 / D3 / 60분"
 ---
 
 ## ☑️ PR(Pull requests) 규칙
-### 매일 코딩문제 풀이가 끝나면 fork한 저장소에 Push한 후 Pull request를 보낼 것
-### PR은 해당 주차 금요일에 대면 스터디 이후 merge 예정
+- 매일 코딩문제 풀이가 끝나면 fork한 저장소에 Push한 후 Pull request를 보낼 것
+- PR은 해당 주차 금요일에 대면 스터디 이후 merge 예정
 ### 📌 PR 제목 형식
 ```
 이름 / 주차 요일 / 몇문제
