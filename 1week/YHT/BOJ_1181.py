@@ -20,6 +20,6 @@ def bubble_sort(arr):
     n = len(arr)
     # for i in range(n - 1):
     #     for j in range(n - 1 - i):
-            #버블 정렬 구현하려다 못함
+            #기억에 의존해서 버블 정렬 구현하려다 실패
 
 bubble_sort(a)
