@@ -10,16 +10,21 @@
 # 출력
 # 조건에 따라 정렬하여 단어들을 출력한다.
 
-
 n=int(input())
-b=[]
-c=[]
-for i in range(0,n):
-    a=list(map(str,input()))
-def bubble_sort(arr):
-    n = len(arr)
-    # for i in range(n - 1):
-    #     for j in range(n - 1 - i):
-            #기억에 의존해서 버블 정렬 구현하려다 실패
-
-bubble_sort(a)
+a=[]
+for i in range(n):
+    a.append(input().strip())
+a=list(set(a))
+for w in range(len(a)):
+    for j in range(len(a)-1):
+        k=[]
+        if(len(a[j])>len(a[j+1])):
+            k=a[j]
+            a[j]=a[j+1]
+            a[j+1]=k
+        elif(len(a[j]) == len(a[j + 1]) and a[j] > a[j + 1]):
+            k=a[j]
+            a[j]=a[j+1]
+            a[j+1]=k
+for c in a:
+    print(c)  
