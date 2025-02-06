@@ -1,55 +1,34 @@
 
+def sum_of_squares(n, m=0):
+    return (n*(n+1)*(2*n+1) - m*(m-1)*(2*m-1))//6
+
+def sum_a_to_b(b, a=0):
+    return (b*(b+1) - a*(a-1))//2
+    
+
+
 def possible_triangle_number(a, b, c, K):
 
-    total = (K+1)*(K+2)*(K+3)/6  #공과 막대 기법으로 생각해보면 모든 수는 K+3 C 3임을 알 수 있음
-    sides = sorted([a, b, c])  # 입력 a, b, c를 정렬 (정렬 후 a <= b <= c)
-    a, b, c = sides[0], sides[1], sides[2] #정렬한 걸 다시 a, b, c로 배정
+    total = (K+1)*(K+2)*(K+3)//6  #공과 막대 기법으로 생각해보면 모든 수는 K+3 C 3임을 알 수 있음
+    sides = [a, b, c]
     invalid_total = 0
     
-    delta = a + b - c # 초기 삼각형이 유효하다면 delta > 0
-    if delta + K <= 0:
-        return 0
-    # 예시 3번처럼 턱도 없는 값(작은 값 2개 + K < 큰 변)이면 0을 바로 반환
+    for x in sides :
+        D = 2*x-(a+b+c)
+        m = max(0, -D)
+        
+        if m > K:
+            continue # 만약 긴 변의 최소값 m이 K보다 크면, 불가능한 경우의 수는 0이다.
+        d = (K-D)//2
+        if d < m:
+            d = m-1 # 전환점이 존재하지 않는 경우 그냥 강제로 큰쪽만 발동하게 되게 만들었다
+        S1 = (sum_of_squares(d, m) + (2*D+3)*sum_a_to_b(d, m) + (D+1)*(D+2)*(d-m+1))//2
+        S2 = (sum_of_squares(K, d+1) - (2*K+3)*sum_a_to_b(K, d+1) + (K+1)*(K+2)*(K-d))//2
 
-    invalid_total = 0
-
+        invalid_total += S1+S2
+        
     valid = total - invalid_total
     return valid
-
-
-'''
-def count_invalid_for_case(delta, K):
-    if delta > K:
-        return 0
-    u0 = (K + delta) // 2
-    seg1 = S(u0 - delta)
-    seg2 = S(K - (u0 + 1))
-    return seg1 + seg2
-
-def count_valid_outcomes_closed(A, B, C, K):
-
-    a, b, c = sorted([A, B, C])
-    delta = a + b - c
-    if delta + K <= 0:
-        return 0
-    total = (K + 1) * (K + 2) * (K + 3) // 6
-    
-    # Case X: 최대가 X = a+u, δ₁ = (b+c) - a.
-    delta1 = (b + c) - a
-    inv_x = count_invalid_for_case(delta1, K)
-    
-    # Case Y: 최대가 Y = b+v, δ₂ = (a+c) - b.
-    delta2 = (a + c) - b
-    inv_y = count_invalid_for_case(delta2, K)
-    
-    # Case Z: 최대가 Z = c+w, δ₃ = (a+b) - c.
-    delta3 = (a + b) - c
-    inv_z = count_invalid_for_case(delta3, K)
-    
-    total_invalid = inv_x + inv_y + inv_z
-    valid = total - total_invalid
-    return valid
-'''
 
 
 T = int(input())
