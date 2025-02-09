@@ -14,6 +14,6 @@ T = int(input().strip())
 for t in range(1, T + 1):
     N = int(input().strip())
     a = list(map(int, input().split()))
-    
+    #3423
     r = f(a)
     print(f"#{t} {r}")
