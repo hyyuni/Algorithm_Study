@@ -11,5 +11,4 @@ for i in range(1,T+1):
     re3=(list(map(list,zip(*re2[::-1]))))
     print(f"#{i} ")
     for x in range(a):
-        print("".join(map(str,re[x])),"".join(map(str,re2[x])),"".join(map(str,re[x])))
-    print()
+        print("".join(map(str,re[x])),"".join(map(str,re2[x])),"".join(map(str,re3[x])))
