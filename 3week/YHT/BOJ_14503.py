@@ -1,8 +1,36 @@
-"""
-먼저 2차원 리스트로 input 받기
-deep copy를 통해 먼저 copy후
-전체 치킨 집 중에서 M개를 골라서 조합을 하나하나 측정해보고 값을 갱신해나가면 된다.
-먼저 치킨집의 좌표를 반환후에
-왜 조합일까? 1,2,3 치킨집 뽑아서 거리를 계산하는거랑 2,3,1 치킨집 뽑아서 거리 계산하는거랑 차이가 없기 때문 itertools
-좌표에 해당하는 x,y 해당 조합을 짜서 M개를 뽑아 해당 값의 거리중에 치킨거리의 측정해서 합의 최소의 값을 갱신해서 출력력한다 
-"""
+def a():
+    n, m = map(int, input().split())
+    x, y, d = map(int, input().split())
+    b = [list(map(int, input().split())) for _ in range(n)]
+
+    c = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+
+    e = 0
+
+    while True:
+        if b[x][y] == 0:
+            b[x][y] = 2
+            e += 1
+
+        f = False
+        for _ in range(4):
+            d = (d + 3) % 4
+            nx, ny = x + c[d][0], y + c[d][1]
+
+            if b[nx][ny] == 0:
+                x, y = nx, ny
+                f = True
+                break
+
+        if not f:
+            bd = (d + 2) % 4
+            bx, by = x + c[bd][0], y + c[bd][1]
+
+            if b[bx][by] != 1:
+                x, y = bx, by
+            else:
+                break
+
+    print(e)
+
+a()
