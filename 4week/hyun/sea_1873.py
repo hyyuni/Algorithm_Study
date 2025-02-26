@@ -73,7 +73,7 @@ for tc in range(1, T+1):
             if 0<= nx < H and 0 <= ny < W and arr[nx][ny] == '.':
                 arr[sx][sy] = '.' # 지나간 자리 평탄화
                 sx, sy = nx, ny
-                arr[sx][sy] = tank[dr] # 이동후 탱크 방향 수정하기
+                arr[sx][sy] = tank[dr] # 이동후 탱크 방향 수정하기.
 
     print(f'#{tc}', end = " ")
     for row in arr:
