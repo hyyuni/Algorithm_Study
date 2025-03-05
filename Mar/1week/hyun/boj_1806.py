@@ -11,16 +11,20 @@ N, S = map(int, input().split())
 lst = list(map(int, input().split()))
 min_v = float('inf')
 left = right = 0
-par_sum = 0
+sum = 0
 
-while right < N:  # while문 1개만 사용
-    par_sum += lst[right]
-
-    if par_sum >= S and left <= right:
-        min_v = min(min_v, right - left + 1)
-        par_sum -= lst[left]
+while left <= right:
+    if sum >= S:
+        min_v = min(min_v, right - left)
+        sum -= lst[left]
         left += 1
+    else:
+        if right == N:
+            break
+        sum += lst[right]
+        right += 1
 
-    right += 1  # right 증가하여 다음 요소 포함
-
-print(min_v)
+if min_v != float('inf'):
+    print(min_v)
+else:
+    print(0)
