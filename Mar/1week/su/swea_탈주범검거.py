@@ -1,50 +1,82 @@
-T = int(input())
-
-# 이동 방향: 상, 하, 좌, 우
-row_offset = [-1, 1, 0, 0]
-col_offset = [0, 0, -1, 1]
-
-# 터널 구조 (각 숫자가 연결된 방향)
-tunnel_types = [
-    [],
-    [0, 1, 2, 3],  # 상하좌우 연결
-    [0, 1],        # 상하 연결
-    [2, 3],        # 좌우 연결
-    [0, 3],        # 상우 연결
-    [1, 3],        # 하우 연결
-    [1, 2],        # 하좌 연결
-    [0, 2],        # 상좌 연결
-]
-
-def explore(row, col, time):
-    if time > max_time:
-        return
-
-    visited[row][col] = time
-    current_tunnel = tunnel_types[grid[row][col]]
-
-    for direction in current_tunnel:
-        next_row = row + row_offset[direction]
-        next_col = col + col_offset[direction]
-
-        if not (0 <= next_row < rows and 0 <= next_col < cols):
-            continue  # 범위 벗어남
-        if grid[next_row][next_col] == 0:
-            continue  # 터널 없음
-        if visited[next_row][next_col] is not None and visited[next_row][next_col] <= time:
-            continue  # 이미 더 짧은 시간에 방문한 경우
-
-        opposite_direction = (direction + 2) % 4  # 반대 방향 계산
-
-        if opposite_direction in tunnel_types[grid[next_row][next_col]]:
-            explore(next_row, next_col, time + 1)
-
-for test_case in range(1, T + 1):
-    rows, cols, start_row, start_col, max_time = map(int, input().split())
-    grid = [list(map(int, input().split())) for _ in range(rows)]
-    visited = [[None] * cols for _ in range(rows)]
-
-    explore(start_row, start_col, 1)
-
-    reachable_count = sum(row.count(None) == False for row in visited)
-    print(f'#{test_case} {reachable_count}')
+def solve_escape_simulation():
+    test_cases = int(input())
+     
+    directions = {
+        'up': 0,
+        'down': 1,
+        'left': 2,
+        'right': 3
+    }
+     
+    tunnel_types = [
+        [],  # 빈 공간
+        [directions['up'], directions['down'], directions['left'], directions['right']],  # 1번 터널
+        [directions['up'], directions['down']],  # 2
+        [directions['left'], directions['right']],  # 3
+        [directions['up'], directions['right']],  # 4
+        [directions['down'], directions['right']],  # 5
+        [directions['down'], directions['left']],  # 6
+        [directions['up'], directions['left']]  # 7
+    ]
+     
+    direction_row = [-1, 1, 0, 0]  
+    direction_col = [0, 0, -1, 1]  
+     
+    opposite_direction = {
+        directions['up']: directions['down'],
+        directions['down']: directions['up'],
+        directions['left']: directions['right'],
+        directions['right']: directions['left']
+    }
+     
+    def dfs(row, col, elapsed_time):
+        """
+        깊이 우선 탐색으로 탈주범이 이동할 수 있는 위치를 탐색
+        """
+        if elapsed_time > time_limit:
+            return
+         
+        time_map[row][col] = elapsed_time
+         
+        available_directions = tunnel_types[tunnel_map[row][col]]
+         
+        for direction in available_directions:
+            next_row = row + direction_row[direction]
+            next_col = col + direction_col[direction]
+             
+             
+            if (next_row < 0 or next_row >= height or 
+                next_col < 0 or next_col >= width or 
+                tunnel_map[next_row][next_col] == 0):
+                continue
+             
+            # 아직 방문하지 않았거나 더 빠른 시간에 방문할 수 있는 경우
+            if time_map[next_row][next_col] == 0 or time_map[next_row][next_col] > elapsed_time + 1:
+                next_direction = opposite_direction[direction]
+                 
+                # 다음 위치의 터널이 현재 위치와 연결 가능한 경우 이동
+                if next_direction in tunnel_types[tunnel_map[next_row][next_col]]:
+                    dfs(next_row, next_col, elapsed_time + 1)
+     
+    for tc in range(1, test_cases + 1):
+        height, width, start_row, start_col, time_limit = map(int, input().split())
+         
+         
+        tunnel_map = [list(map(int, input().split())) for _ in range(height)]
+         
+         
+        time_map = [[0] * width for _ in range(height)]
+         
+         
+        dfs(start_row, start_col, 1)
+         
+         
+        accessible_locations = 0
+        for row in range(height):
+            for col in range(width):
+                if time_map[row][col] > 0:
+                    accessible_locations += 1
+         
+        print(f'#{tc} {accessible_locations}')
+ 
+solve_escape_simulation()
