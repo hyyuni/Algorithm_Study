@@ -1,47 +1,43 @@
-import sys
-sys.setrecursionlimit(10**6)
+from collections import deque
 
+# 노드 개수
 v = int(input())
-
-child_lists = [[] for _ in range(v+1)]   # 부모를 인덱스로 자식을 담고있는 리스트
-weights = [0]*(v+1)         # 자식을 인덱스로 부모와 연결된 가치를 저장
-checked = [0]*(v+1)
+adj_list = [[] for _ in range(v+1)]
 
 for _ in range(v):
     edges = list(map(int, input().split()))
     start = edges.pop(0)
-    checked[start] = 1
-    edges.pop()
-
-    for i in range(len(edges)//2):
-        
+    edges.pop()  # -1 제거
+    num_edges = len(edges)//2
+    
+    for i in range(num_edges):
         end_idx = 2*i
         end = edges[end_idx]
-        if checked[end]:
-            continue
-        weight_idx = 2*i +1
+        weight_idx = 2*i + 1
         weight = edges[weight_idx]
+        adj_list[start].append((end, weight))
 
-        child_lists[start].append(end)
-        weights[end] = weight
+def bfs(start):
+    visited = [0]*(v+1)
+    q = deque()  # (현재 노드, 현재까지 거리)
+    q.append((start, 0))
+    visited[start] = 1
+    max_node = start
+    max_dist = 0
 
-ans = 0
+    while q:
+        cur_node, cur_dist = q.popleft()
+        if cur_dist > max_dist:
+            max_dist = cur_dist
+            max_node = cur_node
+        for next_node, next_dist in adj_list[cur_node]:
+            if not visited[next_node]:
+                visited[next_node] = 1
+                q.append((next_node, cur_dist + next_dist))
+    return max_node, max_dist
 
-def postorder_traversal(node):
-    child_list = child_lists[node]
-    global ans
-    if child_list != []:
-        w_list = []
-        for child in child_list:
-            cur = postorder_traversal(child)
-            w_list.append(cur)
-        w_list.sort(reverse=True)
-        ans = max(ans, sum(w_list[0:2]))
-        return max(w_list) + weights[node]
-    else:
-        return weights[node]
 
-root = 1 # 내맘대로 선언(트리는 모든 노드가 루트가 될 수 있음)
-postorder_traversal(root)
+start_node, start_dist = bfs(1)
+end_node, ans = bfs(start_node)
 
 print(ans)
