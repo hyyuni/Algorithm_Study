@@ -4,16 +4,21 @@ import heapq
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
-def bfs(y, x, number):
-    queue = deque([(y, x)])
-    islands[y][x] = number
+def bfs(sy, sx):
+    queue = deque([(sy, sx)])
+    v.add((sy,sx))
+    islands[sy][sx] = number
 
     while queue:
         cy, cx = queue.popleft()
         for dir in range(4):
-            ny, nx = cy + dy[dir], cx + dx[dir]
-            if 0 <= ny < n and 0 <= nx < m and islands[ny][nx] == 1:
+            ny = cy + dy[dir]
+            nx = cx + dx[dir]
+            if not (0 <= ny < n and 0 <= nx < m):
+                continue
+            if islands[ny][nx] and (ny,nx) not in v:
                 islands[ny][nx] = number
+                v.add((ny,nx))
                 queue.append((ny, nx))
 
 def prim():
@@ -46,10 +51,11 @@ islands = [list(map(int, input().split())) for _ in range(n)]
 
 # 섬 번호 매기기
 number = 1
+v = set()
 for y in range(n):
     for x in range(m):
-        if islands[y][x] == 1:
-            bfs(y, x, number)
+        if (y,x) not in v and islands[y][x] == 1:
+            bfs(y, x)
             number += 1
 
 N = number - 1  # 섬 개수
